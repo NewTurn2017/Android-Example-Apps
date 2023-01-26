@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/etInput"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="정수를 입력하세요"
+        android:textSize="20sp"
+        android:textColor="@color/purple_700"
+        android:gravity="end"
+        android:inputType="numberDecimal"
+        android:maxLength="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.3"
+        />
+
+    <TextView
+        android:id="@+id/tvOutput"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:gravity="end"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/etInput"
+        app:layout_constraintStart_toStartOf="@+id/etInput"
+        app:layout_constraintTop_toBottomOf="@+id/etInput" />
+
+    <TextView
+        android:id="@+id/tvInputUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cm"
+        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/etInput"
+        app:layout_constraintBottom_toBottomOf="@+id/etInput"
+        />
+
+    <TextView
+        android:id="@+id/tvOutputUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="m"
+        android:textSize="20sp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/tvOutput"
+        app:layout_constraintBottom_toBottomOf="@+id/tvOutput" />
+
+    <ImageButton
+        android:id="@+id/btnUnitSwap"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/tvOutput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvInputUnit"
+        app:layout_constraintTop_toTopOf="@+id/etInput"
+        app:srcCompat="@drawable/baseline_swap_vert_24" />
+    />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
