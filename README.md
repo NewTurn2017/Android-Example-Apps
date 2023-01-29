@@ -1,6 +1,6 @@
 # Android-Example-Apps
 
-<Basic Apps>
-# chapter2 : Counter App
-# chapter3 : UnitConverter App
-# chapter4 : Emergency Medical Info App
+## <Basic Apps>
+1. chapter2 : Counter App
+2. chapter3 : UnitConverter App
+3. chapter4 : Emergency Medical Info App
