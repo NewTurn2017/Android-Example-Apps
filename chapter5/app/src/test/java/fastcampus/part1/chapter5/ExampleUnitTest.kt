@@ -1,4 +1,4 @@
-package com.remind.chapter5
+package fastcampus.part1.chapter5
 
 import org.junit.Test
 
