@@ -1,16 +1,28 @@
 package com.remind.chapter8
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import com.remind.chapter8.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    private val imageLoadLauncher =
+        registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
+            updateImages(uriList)
+        }
+    private lateinit var imageAdapter: ImageAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +30,38 @@ class MainActivity : AppCompatActivity() {
 
         binding.loadImageButton.setOnClickListener {
             checkPermission()
+        }
+        binding.navigateFrameActivityButton.setOnClickListener {
+            navigateToFrameActivity()
+        }
+        initRecyclerView()
+    }
+
+    private fun navigateToFrameActivity() {
+        val images = imageAdapter.currentList.filterIsInstance<ImageItems.Image>()
+            .map { it.uri.toString() }.toTypedArray()
+        val intent = Intent(this, FrameActivity::class.java)
+            .putExtra("images", images)
+        startActivity(intent)
+    }
+
+    private fun initRecyclerView() {
+        binding.imageRecyclerView.adapter = ImageAdapter(object : ImageAdapter.ItemClickListener {
+
+            override fun onLoadMoreClick() {
+                imageLoadLauncher.launch("image/*")
+            }
+        })
+        imageAdapter = ImageAdapter(object : ImageAdapter.ItemClickListener {
+
+            override fun onLoadMoreClick() {
+                checkPermission()
+            }
+        })
+
+        binding.imageRecyclerView.apply {
+            adapter = imageAdapter
+            layoutManager = GridLayoutManager(this@MainActivity, 2)
         }
     }
 
@@ -65,7 +109,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadImage() {
-        Toast.makeText(this, "loadImage()", Toast.LENGTH_SHORT).show()
+        imageLoadLauncher.launch("image/*")
+    }
+
+    private fun updateImages(uriList: List<Uri>?) {
+        val images = uriList?.map {ImageItems.Image(it)}
+        val updatedImages = imageAdapter.currentList.toMutableList().apply {
+            addAll(images ?: listOf())
+        }
+        imageAdapter.submitList(updatedImages)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            REQUEST_READ_EXTERNAL_STORAGE -> {
+                val resultCode = grantResults.firstOrNull() ?: PackageManager.PERMISSION_DENIED
+                if ((resultCode == PackageManager.PERMISSION_GRANTED)) {
+                    loadImage()
+                } else {
+                    Toast.makeText(this, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
     }
 
     companion object {
