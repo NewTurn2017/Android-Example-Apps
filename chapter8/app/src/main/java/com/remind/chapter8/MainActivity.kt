@@ -7,6 +7,8 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +30,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        binding.toolbar.apply {
+            title = "사진 가져오기"
+            setSupportActionBar(this)
+        }
+
+
         binding.loadImageButton.setOnClickListener {
             checkPermission()
         }
@@ -35,6 +43,23 @@ class MainActivity : AppCompatActivity() {
             navigateToFrameActivity()
         }
         initRecyclerView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add -> {
+                checkPermission()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     private fun navigateToFrameActivity() {
@@ -113,7 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateImages(uriList: List<Uri>?) {
-        val images = uriList?.map {ImageItems.Image(it)}
+        val images = uriList?.map { ImageItems.Image(it) }
         val updatedImages = imageAdapter.currentList.toMutableList().apply {
             addAll(images ?: listOf())
         }
