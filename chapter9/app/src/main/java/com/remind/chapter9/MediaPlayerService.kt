@@ -74,6 +74,13 @@ class MediaPlayerService : Service() {
             .setSmallIcon(R.drawable.baseline_star_24)
             .addAction(
                 Notification.Action.Builder(
+                    stopIcon,
+                    "Stop",
+                    stopPendingIntent
+                ).build()
+            )
+            .addAction(
+                Notification.Action.Builder(
                     playIcon,
                     "Play",
                     playPendingIntent
@@ -84,13 +91,6 @@ class MediaPlayerService : Service() {
                     pauseIcon,
                     "Pause",
                     pausePendingIntent
-                ).build()
-            )
-            .addAction(
-                Notification.Action.Builder(
-                    stopIcon,
-                    "Stop",
-                    stopPendingIntent
                 ).build()
             )
             .setContentIntent(mainPendingIntent)
